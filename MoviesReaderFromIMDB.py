@@ -51,7 +51,7 @@ class MoviesReader:
         time.sleep(how_long)
     
     def run_program(self):
-        
+        pass
         
 class TestModule(unittest.TestCase):
     Reader = MoviesReader()
