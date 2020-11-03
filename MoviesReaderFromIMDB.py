@@ -1,7 +1,34 @@
-import selenium, time, re, PostgresSQL
+import selenium, time, re, PostgresSQL, unittest
 from selenium import webdriver
 
+class MoviesReader:
+    def __init__(self):
+        pass
+    
+    def checking_for_apostrophe(self, line:str) -> bool:
+        for letter in line:
+            if letter == "'":
+                return True
+        return False
+    
+    def return_working_line_with_SQL(self, line:str) -> str:
+        return "".join(map(lambda letter : (letter * 2) if letter == "'" else letter, line))
+    
+class TestModule(unittest.TestCase):
+    def test_apostrophe(self):
+        self.assertEqual(MoviesReader().checking_for_apostrophe("Conan O'Brian"), True)
+        self.assertEqual(MoviesReader().checking_for_apostrophe("Whitney Houston"), False)
+        self.assertEqual(MoviesReader().checking_for_apostrophe("'"), True)
+    
+    def test_apostrophe_returned_line(self):
+        self.assertEqual(MoviesReader().return_working_line_with_SQL("Conan O'Brian"), "Conan O''Brian")
+        self.assertEqual(MoviesReader().return_working_line_with_SQL("Whitney Houston"), "Whitney Houston")
+        self.assertEqual(MoviesReader().return_working_line_with_SQL("'"), "''")
 
+if __name__ == "__main__":
+    unittest.main()
+
+"""
 # Starting to search movies from Cast Away movie.
 chrome = webdriver.Chrome()
 chrome.get("https://www.imdb.com/title/tt0111161/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=e31d89dd-322d-4646-8962-327b42fe94b1&pf_rd_r=8T22EMXCZBPAENNVDGBT&pf_rd_s=center-1&pf_rd_t=15506&pf_rd_i=top&ref_=chttp_tt_1")
@@ -41,3 +68,4 @@ while i <= 250:
         print(err)
         break
 postgres_lista.sendToDatabase()
+"""
